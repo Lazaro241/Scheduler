@@ -10,44 +10,44 @@ public class Scheduler {
     }
 
     public void setEstrategia(ReemplazoPaginaStrategy algoritmo){
-        this.algoritmo = algoritmo;
+        this.algoritmo = algoritmo; //Cambia algoritmo de reemplazo
     }
 
     public void cargarPagina(int idPagina){
 
-        Proceso pagina = new Proceso(idPagina);
+        Proceso pagina = new Proceso(idPagina); //Crea la pagina que se almacenara en memoria
 
-        if(ram.contienePagina(idPagina)){
+        if(ram.contienePagina(idPagina)){ //Revisa si la pagina que se solicita no se encuentra ya en memoria
             System.out.println("Pagina "+idPagina+" ya está en RAM.");
-            aciertos++;
-            if(algoritmo.getClass()==LRUStrategy.class){
-                algoritmo.notificar(pagina);
+            aciertos++; //Si esta, se cuenta un acierto de pagina
+            if(algoritmo.getClass()==LRUStrategy.class){ //Comprueba si el algoritmo utilizado es LRU
+                algoritmo.notificar(pagina); //Si es, tiene que actualizar el ultimo uso de la pagina
             }
             return;
         }
 
-        fallos++;
+        fallos++; //Se suma un fallo de pagina
 
-        int libre = ram.buscarIndiceLibre();
+        int libre = ram.buscarIndiceLibre(); //Solicita un espacio de memoria que se encuentre libre, devolvera -1 si no hay
 
-        if(libre!=-1){
-            ram.cargarProceso(libre, pagina);
-            pagina.setPosicionEnRam(libre);
+        if(libre!=-1){ //Pregunta si se encontro un espacio libre
+            ram.cargarProceso(libre, pagina); //Si es que si, se carga en la posicion libre
+            pagina.setPosicionEnRam(libre); // Se guarda en la pagina su posicion
             System.out.println("Proceso "+pagina.getId()+" cargado correctamente en posicion "+ libre);
         } else {
-            int reemplazo = algoritmo.encontrarPosicionReemplazo(ram);
-            ram.cargarProceso(reemplazo, pagina);
+            int reemplazo = algoritmo.encontrarPosicionReemplazo(ram); //Si no, crea una variable para guardar la posicion de reemplazo, y ejecuta el algoritmo de reemplazo
+            ram.cargarProceso(reemplazo, pagina); //Carga la pagina en la posicion de reemplazo encontrada
             pagina.setPosicionEnRam(reemplazo);
             System.out.println("Proceso "+pagina.getId()+" cargado correctamente en posicion "+ reemplazo);
         }
-        algoritmo.notificar(pagina);
+        algoritmo.notificar(pagina); //Dependiendo del algoritmo, se va a notificar la carga para tener en cuenta en proximos fallos
     }
 
     public int getAciertos(){
-        return this.aciertos;
+        return this.aciertos; //Devuelve los aciertos de pagina
     }
 
     public int getFallos(){
-        return this.fallos;
+        return this.fallos; //Devuelve los fallos de pagina
     }
 }

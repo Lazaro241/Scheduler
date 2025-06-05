@@ -10,30 +10,30 @@ public class RAM {
     }
 
     public void cargarProceso(int posicion, Proceso proceso){
-        this.celdas[posicion] = proceso;
+        this.celdas[posicion] = proceso; //Almacena una pagina en el espacio indicado
     }
 
     public boolean contienePagina(int idPagina){
-        for(Proceso p : celdas){
+        for(Proceso p : celdas){ //Revisa todos los espacios para paginas
             if((p!=null)&&p.getId()==idPagina){
-                return true;
+                return true; //Si la encuentra, devuelve true
             }
         }
-        return false;
+        return false; //Si no, devuelve false
     }
 
     public int buscarIndiceLibre(){
-        for(int i=0;i<celdas.length;i++){
+        for(int i=0;i<celdas.length;i++){ //Revisa toda la capacidad de la RAM
             if(celdas[i]==null){
-                return i;
+                return i; //Si encuentra un espacio vacio, devuelve la posicion de ese espacio
             }
         }
-        return -1;
+        return -1; //Si no, devuelve -1
     }
     
     public void mostrarRAM(){
         System.out.print("RAM: ");
-        for (Proceso proceso : celdas) {
+        for (Proceso proceso : celdas) { //Pasa por todos los espacios, mostrando en consola lo que hay en cada espacio
             if(proceso==null){
                 System.out.print("[Vacio]");
             } else {
